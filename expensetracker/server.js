@@ -5,8 +5,12 @@ const pool = require('./db')
 const swaggerUi = require('swagger-ui-express')
 const YAML = require('yamljs')
 const path = require('path')
+const { appendRowToSheet } = require('./googleSheets') // Import the helper function
 
 app.use(express.json())
+
+// Set up the environment variable check
+const enableSheetLogging = process.env.ENABLE_SHEET_LOGGING === 'true'
 
 // Load the Swagger file
 const swaggerDocument = YAML.load(path.join(__dirname, 'swagger.yaml'))
