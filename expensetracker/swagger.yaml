@@ -1,0 +1,192 @@
+openapi: 3.0.0
+info:
+  title: Expenses API
+  description: A simple API to manage expense records.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+paths:
+  /expenses:
+    get:
+      summary: Get all expenses
+      description: Retrieves a list of all expense records.
+      responses:
+        '200':
+          description: A list of expenses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Expense'
+        '500':
+          description: Server error.
+    post:
+      summary: Create a new expense
+      description: Creates a new expense record in the database.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewExpense'
+      responses:
+        '201':
+          description: Expense created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  message:
+                    type: string
+                    example: Expense added successfully
+        '500':
+          description: Server error.
+  /expenses/{id}:
+    get:
+      summary: Get an expense by ID
+      description: Retrieves a single expense record by its unique ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the expense to retrieve.
+      responses:
+        '200':
+          description: A single expense record.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+        '404':
+          description: Expense not found.
+        '500':
+          description: Server error.
+    put:
+      summary: Update an expense
+      description: Updates an existing expense record by ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the expense to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewExpense'
+      responses:
+        '200':
+          description: Expense updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Expense updated successfully
+        '404':
+          description: Expense not found.
+        '500':
+          description: Server error.
+    delete:
+      summary: Delete an expense
+      description: Deletes a single expense record by ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the expense to delete.
+      responses:
+        '200':
+          description: Expense deleted successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Expense deleted successfully
+        '404':
+          description: Expense not found.
+        '500':
+          description: Server error.
+components:
+  schemas:
+    Expense:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the expense.
+          example: 1
+        date:
+          type: string
+          format: date
+          description: The date of the expense.
+          example: '2024-08-09'
+        description:
+          type: string
+          description: A brief description of the expense.
+          example: 'Groceries for the week'
+        category:
+          type: string
+          description: The category of the expense (e.g., Food, Transport).
+          example: 'Food'
+        payment_mode:
+          type: string
+          description: The payment method used.
+          example: 'Credit Card'
+        person:
+          type: string
+          description: The name of the person who made the expense.
+          example: 'John Doe'
+        amount:
+          type: number
+          format: float
+          description: The amount of the expense.
+          example: 75.50
+    NewExpense:
+      type: object
+      required:
+        - date
+        - description
+        - category
+        - payment_mode
+        - person
+        - amount
+      properties:
+        date:
+          type: string
+          format: date
+          example: '2024-08-09'
+        description:
+          type: string
+          example: 'Groceries for the week'
+        category:
+          type: string
+          example: 'Food'
+        payment_mode:
+          type: string
+          example: 'Credit Card'
+        person:
+          type: string
+          example: 'John Doe'
+        amount:
+          type: number
+          format: float
+          example: 75.50
