@@ -1,7 +1,7 @@
 const { google } = require('googleapis')
 const path = require('path')
 
-const KEY_FILE_PATH = path.join(__dirname, 'searchkota-c25a37feab12.json')
+const KEY_FILE_PATH = path.join(__dirname, 'searchkota-5d17dfc1ad27.json')
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 const SPREADSHEET_ID = '1S1kqBL5euTC02odxPRROO9eEZ-qm9IJl8SX1zqAYE4w'
 
