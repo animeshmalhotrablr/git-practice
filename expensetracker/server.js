@@ -1,10 +1,18 @@
 const express = require('express')
-const mysql = require('mysql2/promise') // Using promise-based version
 const app = express()
 const port = 3000
 const pool = require('./db')
+const swaggerUi = require('swagger-ui-express')
+const YAML = require('yamljs')
+const path = require('path')
 
 app.use(express.json())
+
+// Load the Swagger file
+const swaggerDocument = YAML.load(path.join(__dirname, 'swagger.yaml'))
+
+// Use swagger-ui-express to serve the API documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // 1. POST /expenses - Create a new expense record
 app.post('/expenses', async (req, res) => {
