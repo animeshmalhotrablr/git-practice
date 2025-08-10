@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const port = 3000
 const pool = require('./db')
@@ -6,6 +7,9 @@ const swaggerUi = require('swagger-ui-express')
 const YAML = require('yamljs')
 const path = require('path')
 const { appendRowToSheet } = require('./googleSheets') // Import the helper function
+
+// Use the cors middleware before your routes
+app.use(cors()) // <-- Add this line
 
 app.use(express.json())
 
