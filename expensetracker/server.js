@@ -13,7 +13,7 @@ const { appendRowToSheet } = require('./googleSheets') // Import the helper func
 
 // Configure CORS to only allow your React frontend's domain
 const corsOptions = {
-  origin: 'https://expensetrackerui.vercel.app/',
+  origin: 'https://expensetrackerui.vercel.app',
   optionsSuccessStatus: 200, // For legacy browser support
 }
 
