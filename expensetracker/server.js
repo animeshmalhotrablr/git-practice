@@ -9,7 +9,15 @@ const path = require('path')
 const { appendRowToSheet } = require('./googleSheets') // Import the helper function
 
 // Use the cors middleware before your routes
-app.use(cors()) // <-- Add this line
+// app.use(cors()) // <-- Add this line
+
+// Configure CORS to only allow your React frontend's domain
+const corsOptions = {
+  origin: 'https://expensetrackerui.vercel.app/',
+  optionsSuccessStatus: 200, // For legacy browser support
+}
+
+app.use(cors(corsOptions))
 
 app.use(express.json())
 
