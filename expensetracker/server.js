@@ -24,6 +24,17 @@ app.use(cors()) // <-- Add this line
 
 app.use(express.json())
 
+// Add CORS headers to all responses
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS'
+  )
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  next()
+})
+
 // Set up the environment variable check
 const enableSheetLogging = process.env.ENABLE_SHEET_LOGGING === 'true'
 
