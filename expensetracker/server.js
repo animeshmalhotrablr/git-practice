@@ -1,7 +1,10 @@
 const express = require('express')
 const cors = require('cors')
+require('dotenv').config()
+
 const app = express()
-const port = 3000
+// const port = 3000
+const port = process.env.APP_PORT // || 3001 // Use the port from environment variable or default to 3001
 const pool = require('./db')
 const swaggerUi = require('swagger-ui-express')
 const YAML = require('yamljs')
@@ -9,15 +12,15 @@ const path = require('path')
 const { appendRowToSheet } = require('./googleSheets') // Import the helper function
 
 // Use the cors middleware before your routes
-// app.use(cors()) // <-- Add this line
+app.use(cors()) // <-- Add this line
 
 // Configure CORS to only allow your React frontend's domain
-const corsOptions = {
-  origin: true,
-  optionsSuccessStatus: 200, // For legacy browser support
-}
+// const corsOptions = {
+//   origin: true,
+//   optionsSuccessStatus: 200, // For legacy browser support
+// }
 
-app.use(cors(corsOptions))
+// app.use(cors(corsOptions))
 
 app.use(express.json())
 
