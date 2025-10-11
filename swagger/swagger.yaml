@@ -1,0 +1,115 @@
+openapi: 3.0.0
+info:
+  title: Gmail Auth & Custom Authorization API
+  version: 1.0.0
+  description: Node.js API with Gmail Authentication, Custom MySQL Authorization, JWT scope injection, and Database Logging.
+
+servers:
+  - url: http://localhost:3000
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
+paths:
+  /auth/google:
+    get:
+      tags:
+        - Authentication
+      summary: Initiate Gmail Sign-in
+      description: Redirects to Google for authentication.
+      responses:
+        '302':
+          description: Redirect to Google Auth URL.
+
+  /auth/google/callback:
+    get:
+      tags:
+        - Authentication
+      summary: Google Callback URL
+      description: |
+        Google redirects here after sign-in.
+        The server performs custom authorization (MySQL check) and generates a JWT
+        with injected scopes (e.g., 'user:read', 'admin').
+      responses:
+        '200':
+          description: Authentication successful, returns the Bearer Token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  token:
+                    {
+                      type: string,
+                      description: 'The JWT with injected scopes.',
+                    }
+                  user: { type: object }
+
+  /api/profile:
+    get:
+      tags:
+        - Protected API
+      summary: Get User Profile
+      description: Requires 'user:read' scope. Protected by the custom JWT.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User profile and assigned scopes.
+        '401':
+          description: Unauthorized (missing token).
+        '403':
+          description: Forbidden (invalid token or missing 'user:read' scope).
+
+  /api/data:
+    post:
+      tags:
+        - Protected API
+      summary: Create Data
+      description: Requires 'data:write' scope. Protected by the custom JWT.
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item: { type: string }
+      responses:
+        '200':
+          description: Data created.
+        '403':
+          description: Forbidden (missing 'data:write' scope).
+
+  /api/logs/login:
+    get:
+      tags:
+        - Admin/Logs
+      summary: Retrieve all Login Events
+      description: Requires 'admin' scope.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of login events.
+
+  /api/logs/audit:
+    get:
+      tags:
+        - Admin/Logs
+      summary: Retrieve all Audit Logs
+      description: Requires 'admin' scope.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of API audit logs.
