@@ -13,7 +13,21 @@ const app = express()
 const PORT = process.env.PORT || 3000
 
 // Use the cors middleware before your routes
-app.use(cors()) // <-- Add this line
+// app.use(cors()) // <-- Add this line
+
+app.use(
+  cors({
+    // 1. Explicitly allow the frontend domain
+    origin: 'http://localhost:3001',
+
+    // 2. Explicitly allow credentials (cookies/session ID)
+    credentials: true,
+
+    // 3. (Optional but good practice) List allowed methods and headers
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+)
 
 // Middleware Setup
 app.use(express.json())
